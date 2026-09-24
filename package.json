@@ -1,13 +1,30 @@
 {
-  "name":"u-device",
-  "version":"0.1.0",
-  "description":"An open record for named or unknown devices, explicit adapters and a fingerprint that can return.",
-  "type":"module",
-  "exports":"./u.mjs",
-  "scripts":{"test":"node --test test/u.test.mjs","demo":"node example.mjs"},
-  "license":"LicenseRef-U-Device-1.0",
-  "homepage":"https://chuumind.com/home/",
-  "repository":{"type":"git","url":"https://github.com/Justichuu/u-device.git"},
-  "keywords":["u-device","unknown-device","provenance","accessibility","haptics","adapters"],
-  "engines":{"node":">=22"}
+  "name": "u-device",
+  "version": "0.1.0",
+  "description": "An open record for named or unknown devices, explicit adapters and a fingerprint that can return.",
+  "type": "module",
+  "exports": "./u.mjs",
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "demo": "node example.mjs",
+    "logic": "node verify.mjs",
+    "burn": "node burn.mjs"
+  },
+  "license": "LicenseRef-U-Device-1.0",
+  "homepage": "https://chuumind.com/home/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Justichuu/u-device.git"
+  },
+  "keywords": [
+    "u-device",
+    "unknown-device",
+    "provenance",
+    "accessibility",
+    "haptics",
+    "adapters"
+  ],
+  "engines": {
+    "node": ">=22"
+  }
 }

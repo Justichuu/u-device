@@ -1,50 +1,23 @@
-// The check. Run every port, read the tape each one produces, and prove they
-// agree. That agreement is the whole claim: the fingerprint comes out of what
-// the device does, not out of anything written next to it.
-//
-//   node verify.mjs
-
-import { execFileSync } from "node:child_process";
-import { createHash } from "node:crypto";
-import { u, not, and, or, tape, KNOWN } from "./u.js";
-
-const KEY = "66cce8d50854";
-const ports = [
-  ["u.js  node", ["node", ["u.js"]]],
-  ["u.py  python", ["python", ["u.py"]]],
-  ["u.sh  sh", ["sh", ["u.sh"]]],
-];
-
-let bad = 0;
-const say = (face, name, detail) => {
-  if (face !== "1") bad++;
-  console.log(`  ${face}  ${name}${detail ? "  " + detail : ""}`);
-};
-
-console.log("\nthe tape, once per runtime\n");
-for (const [name, [cmd, args]] of ports) {
-  let got;
-  try {
-    const out = execFileSync(cmd, args, { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
-    got = (out.match(/tape\s+(\S+)/) || [])[1];
-  } catch (err) {
-    // A runtime that is not installed is u, not 0. It was not measured here.
-    console.log(`  u  ${name}  not on this machine: ${cmd} did not run`);
-    continue;
-  }
-  say(got === KNOWN ? "1" : "0", name, got);
+// Compare the finite logic table in the available ports. U is not a pass.
+import {execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+import {fileURLToPath} from 'node:url';
+import {u, not, and, or, tape, KNOWN} from './u.js';
+const cwd=fileURLToPath(new URL('.',import.meta.url));
+const records=[];
+for(const [name,cmd,file] of [
+ ['JavaScript',process.execPath,'u.js'],
+ ['Python',process.env.U_PYTHON||'python','u.py'],
+ ['POSIX shell',process.env.U_SHELL||'sh','u.sh']
+]){
+ try{
+  const out=execFileSync(cmd,[file],{cwd,encoding:'utf8',stdio:['ignore','pipe','pipe']});
+  const got=out.match(/tape\s+(\S+)/)?.[1];
+  records.push({name,state:got===KNOWN?'1':'0',tape:got});
+ }catch(error){records.push({name,state:error.code==='ENOENT'?'U':'0',evidence:error.code==='ENOENT'?'Install this runtime and rerun to settle the table.':'Runtime exited without the expected result.',code:error.code||error.status});}
 }
-
-console.log("\nwhat the tape has to be\n");
-say(tape() === KNOWN ? "1" : "0", "tape is the published 22 characters", KNOWN);
-say(createHash("sha256").update(KNOWN).digest("hex").slice(0, 12) === KEY ? "1" : "0", "key is the hash of the tape", KEY);
-
-console.log("\nthe two rules the tape is watching\n");
-let refused = false;
-try { u(); } catch { refused = true; }
-say(refused ? "1" : "0", "a bare u is refused", "stone 4");
-say(or("u", not("u")) === "u" && and("u", not("u")) === "u" ? "1" : "0",
-    "all is and isn't all", "or(u, not u) and and(u, not u) are both u");
-
-console.log(bad === 0 ? "\n1  the device is itself\n" : `\n0  ${bad} failed\n`);
-process.exit(bad === 0 ? 0 : 1);
+let refused=false;try{u();}catch{refused=true;}
+records.push({name:'JavaScript table and guard',state:tape()===KNOWN&&refused&&or('u',not('u'))==='u'&&and('u',not('u'))==='u'?'1':'0'});
+const state=records.some(r=>r.state==='0')?'0':records.some(r=>r.state==='U')?'U':'1';
+console.log(JSON.stringify({state,scope:'Listed ports and finite table only; no authorship inference.',behaviorHash:createHash('sha256').update(KNOWN).digest('hex'),records},null,2));
+process.exitCode=state==='1'?0:state==='U'?2:1;

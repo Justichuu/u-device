@@ -57,3 +57,17 @@ for the runtimes actually checked.
 The license is custom and shown in full, including the owner's formulation.
 It permits broad use with provenance retained and temporary display burning.
 It is not an assertion of approval by a license standards organization.
+
+## Logic ports
+
+The companion `u.js`, `u.py` and `u.sh` enumerate a finite three-value logic
+table. Run `node verify.mjs` to compare the ports, or `node burn.mjs` to check
+one comment-removal and function-renaming transformation. Missing runtimes
+produce U and an incomplete exit status, not a passing aggregate. The shell
+port requires a POSIX shell. Inputs outside `1`, `0`, `u` are rejected.
+
+Equal tables can be written independently. Their hash identifies these outputs,
+not an author, a unique program, every behavior, or a universal truth about
+contradictions. `u.mjs` is the separate channel/receipt implementation used by
+the Home demo. This release preserves both implementations. The source and license copied
+by Home are pinned to this release.

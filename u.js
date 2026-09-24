@@ -5,25 +5,29 @@
 //
 // The fingerprint at the bottom is computed from the four functions above it.
 // It is not read from a comment. Delete this header and it comes out the same.
-// chuumind.com/u says whose it is.
+// PROVENANCE.md records contributions. Equal tables do not prove authorship.
 
 import { pathToFileURL } from "node:url";
 
 export const u = why => {
-  if (!why) throw new Error("a u names the one observation that would settle it");
+  if (typeof why !== "string" || !why.trim()) throw new Error("a u names the one observation that would settle it");
   return "u";
 };
 
-export const not = a => (a === "u" ? "u" : a === "1" ? "0" : "1");
-export const and = (a, b) => (a === "0" || b === "0" ? "0" : a === "u" || b === "u" ? "u" : "1");
-export const or  = (a, b) => (a === "1" || b === "1" ? "1" : a === "u" || b === "u" ? "u" : "0");
+const face = value => {
+  if (!["1", "0", "u"].includes(value)) throw new TypeError("expected 1, 0 or u as a string");
+  return value;
+};
+export const not = a => { face(a); return a === "u" ? "u" : a === "1" ? "0" : "1"; };
+export const and = (a, b) => { face(a); face(b); return a === "0" || b === "0" ? "0" : a === "u" || b === "u" ? "u" : "1"; };
+export const or = (a, b) => { face(a); face(b); return a === "1" || b === "1" ? "1" : a === "u" || b === "u" ? "u" : "0"; };
 
 // Every face the device can show, in the order he says them.
 export const faces = ["1", "0", "u"];
 
-// The tape is the device's whole behaviour written down: not over each face,
+// This finite tape records not over each face,
 // and over each pair, or over each pair, then one character for whether the
-// device still refuses a bare u. 22 characters. This is the fingerprint.
+// device still refuses a bare u. It is a behavior signature, not an author ID.
 export const tape = () =>
   faces.map(not).join("") +
   faces.map(a => faces.map(b => and(a, b)).join("")).join("") +

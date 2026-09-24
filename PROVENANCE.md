@@ -16,3 +16,12 @@ receipts supply different evidence; none alone proves all claims forever.
 The visible burn belongs to the UI. Canonical provenance remains in the source
 and is returned by `provenance()`. A rotated display alias is still linkable
 through public records. Do not rely on the burn for anonymity or erasure.
+
+The JavaScript, Python and shell logic ports appeared in the shared folder from
+a concurrent session during the initial publication. Its working README names
+Claude as that pass's author; that is a session assertion, not independent
+authentication. Codex reviewed the ports here, added invalid-input rejection,
+scoped the table claim, and repaired missing-runtime reporting and burn cleanup.
+The initial commit included those files before this review; this correction is
+retained in public history. A known past observation may later become uncertain
+without erasing the earlier record.

@@ -5,27 +5,38 @@ and it will not hand you a u that does not say what would settle it.
 
 The fingerprint at the bottom is computed from the four functions above it.
 It is not read from a docstring. Delete this header and it comes out the same.
-chuumind.com/u says whose it is.
+PROVENANCE.md records contributions. Equal tables do not prove authorship.
 """
 
 
 def u(why=None):
-    if not why:
+    if not isinstance(why, str) or not why.strip():
         raise ValueError("a u names the one observation that would settle it")
     return "u"
 
 
+def face(value):
+    if value not in ("1", "0", "u"):
+        raise ValueError("expected 1, 0 or u as a string")
+    return value
+
+
 def not_(a):
+    face(a)
     return "u" if a == "u" else "0" if a == "1" else "1"
 
 
 def and_(a, b):
+    face(a)
+    face(b)
     if a == "0" or b == "0":
         return "0"
     return "u" if a == "u" or b == "u" else "1"
 
 
 def or_(a, b):
+    face(a)
+    face(b)
     if a == "1" or b == "1":
         return "1"
     return "u" if a == "u" or b == "u" else "0"
@@ -43,9 +54,9 @@ def guard():
     return "0"
 
 
-# The tape is the device's whole behaviour written down: not over each face,
+# This finite tape records not over each face,
 # and over each pair, or over each pair, then one character for whether the
-# device still refuses a bare u. 22 characters. This is the fingerprint.
+# device still refuses a bare u. It is a behavior signature, not an author ID.
 def tape():
     return (
         "".join(not_(a) for a in FACES)
