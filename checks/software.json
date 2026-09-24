@@ -1,0 +1,18 @@
+{
+  "at": "2026-09-24T00:57:20.755283+00:00",
+  "state": "1",
+  "scope": "11 node:test cases passed on Windows Node v26.7.0; example returned original text and verified its supplied receipt chain.",
+  "files": {
+    "u.mjs": "22261aa453be5ff5d68aece6d3be42def968c74465870300e42ce180ccc34c08",
+    "test/u.test.mjs": "5abd9af963b54b270ca2a36dbacef18be02e4c5475335938209b01db7760d733",
+    "LICENSE": "24c91ed9934d9f6eec159fe4ff2309cbfcce279b0d01f066ca5ad98e25a07cf2"
+  },
+  "independentCheck": "node:crypto SHA-256 compared with Web Crypto for known canonical JSON.",
+  "unmeasured": [
+    "Physical sensation",
+    "Unknown adapters",
+    "Every runtime and future version",
+    "Anonymity or erasure",
+    "Independent contributor identity authentication"
+  ]
+}
